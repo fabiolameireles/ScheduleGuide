@@ -1,3 +1,5 @@
+package io.github.scheduleguide.domain;
+
 import java.time.LocalTime;
 
 public class Intervalo {

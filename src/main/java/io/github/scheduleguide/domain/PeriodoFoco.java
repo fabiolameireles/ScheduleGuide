@@ -1,3 +1,5 @@
+package io.github.scheduleguide.domain;
+
 public class PeriodoFoco extends Periodo {
 	private Conteudo conteudo;
 

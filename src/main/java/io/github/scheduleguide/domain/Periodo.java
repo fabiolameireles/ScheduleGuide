@@ -1,3 +1,5 @@
+package io.github.scheduleguide.domain;
+
 public abstract class Periodo {
 	private int duracaoPrevista;
 	private int duracaoReal;

@@ -22,7 +22,7 @@
 O ScheduleGuide é um sistema pensado para ajudar estudantes no planejamento e execução de suas sessões de estudo, por meio da visualização dos objetivos e sugestão de cronogramas.
 
 O projeto é desenvolvido em Java 25 e JavaScript. Uma vez em execução, a máquina se torna o servidor de acesso via Web. Para manter os dados em memória secundária, ele utiliza um banco de dados SQL.
-#### Diagrama de classes aqui
+<img width="1185" height="801" alt="DiagramaClasses-ScheduleGuide-ExportPNG" src="https://github.com/user-attachments/assets/2a07ddca-bf89-48d6-8d07-0abd65e51a06" />
 
 ## Funcionalidades
 - **Registrar conteúdo:** O sistema permite que o usuário registre os conteúdos que deseja estudar com os recursos de apoio cabíveis e preencher um calendário com suas janelas de disponibilidade.

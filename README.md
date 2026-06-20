@@ -20,6 +20,8 @@ Esse projeto se trata de um trabalho acadêmico da disciplina Projeto Integrado 
 ## Visão geral
 O **ScheduleGuide** oferece uma aplicação que reúne conteúdos, horários disponíveis e cronogramas em um ambiente que facilita o planejamento, execução e análise de sessões de estudo. Ela é hospedada localmente e voltada para uso individual, mas suporta o uso remoto por meio da internet.
 
+O Diagrama de Classes do domínio do sistema está disponível em `./Diagrama-PI1.asta`, e representado abaixo:
+
 <img width="1185" height="801" alt="Diagrama de Classes do domínio do sistema ScheduleGuide" src="https://github.com/user-attachments/assets/2a07ddca-bf89-48d6-8d07-0abd65e51a06" />
 
 ### Funcionalidades

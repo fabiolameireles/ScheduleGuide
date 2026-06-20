@@ -1,7 +1,7 @@
 package io.github.scheduleguide.domain;
 
 import java.util.List;
-/** <i>Documentação da classe Conteúdo</i>
+/** <i>Documentação da classe Conteúdo.</i>
  * 
  * <p>A classe de conteúdo engloba um elemento de uma lista pertencente a um tópico, sendo uma maior especificação
  * de um assunto a ser estudado, possibilitando o usuário centralizar informações úteis relacionadas a este assunto,
@@ -10,15 +10,16 @@ import java.util.List;
  * 
  * @author Fabiola Meireles Vilaça, Igor Wandekochen Bittencourt, Rafael Vieira de Almeida
  * @see io.github.scheduleguide.domain.Topico
+ * @see io.github.scheduleguide.domain.Material
  */
 public class Conteudo {
-	/** Nome deste conteúdo, usado para apresentação ao usuário do sistema*/
+	/** Nome deste conteúdo, usado para apresentação ao usuário do sistema. */
 	private String nome;
 
-	/** Nível de domínio deste conteúdo, valor entre 0 e 10 */
+	/** Nível de domínio deste conteúdo, valor entre 0 e 10. */
 	private int nivelDeDominio;
 
-	/** Anotações referentes a este conteúdo*/
+	/** Anotações referentes a este conteúdo. */
 	private String anotacoes;
 
 	/** Estado de atividade deste conteúdo. Um conteúdo ativo é aquele que,
@@ -30,13 +31,13 @@ public class Conteudo {
 	/** Lista de materiais relacionados a este conteúdo. */
 	private List<Material> materiais;
 
-	/** Tópico a que este conteúdo pertence */
+	/** Tópico a que este conteúdo pertence. */
 	private Topico topico;
 
 
 	/** Constrói um novo objeto da classe <code>Conteudo</code>, a partir dos parâmetros recebidos.
 	 * <br><br>
-	 * Todo <code>Conteudo</code> é criado inicalmente ativo.
+	 * Todo <code>Conteudo</code> é criado inicialmente ativo.
 	 * 
 	 * @param _nome Nome deste conteúdo, para apresentação ao usuário
 	 * @param _nivel Nível de domínio deste conteúdo, entre 0 e 10
@@ -162,7 +163,7 @@ public class Conteudo {
 	 * O <code>indice_material</code> deve estar dentro dos limites da lista de materiais. A função não fará nada em caso contrário.
 	 * 
 	 * @param indice_material Índice do material a ser atualizado.
-	 * @param mat_novo Nova versão do material. Se esse parâmetro for <code>null</code>, o método é equivalente a <code>Conteudo.removeMaterial(indice_material)</code>.
+	 * @param mat_novo Nova versão do material. Se esse parâmetro for <code>null</code>, o método é equivalente a {@link Conteudo#removeMaterial}.
 	 */
 	public void updateMaterial(int indice_material, Material mat_novo){
 		if (mat_novo == null){

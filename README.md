@@ -69,7 +69,7 @@ Uma vez gerada, o acesso à documentação é feito ao abrir o arquivo em `./tar
 ### Execução
 O sistema entra em funcionamento ao executar o seguinte comando:
 ```bash
-./mvnw spring-boot:run`
+./mvnw spring-boot:run
 ```
 Por padrão, o servidor se liga à porta 8080 da máquina e sua página inicial está disponível [localhost:8080/index.html](localhost:8080/index.html).
 

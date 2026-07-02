@@ -5,6 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class NavController {
+    @RequestMapping("/")
+    public String navegarParaIndex() {
+        return "index";
+    }
+
     @RequestMapping("/topicos")
     public String navegarParaTopicos() {
         return "topicos";

@@ -1,6 +1,11 @@
 package io.github.scheduleguide.domain;
 
 import java.util.Optional;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 /** <i>Documentação da classe Material.</i>
  * 
  * <p>A classe material é a forma do usuário centralizar materiais de apoio ao estudo
@@ -10,7 +15,12 @@ import java.util.Optional;
  * @author Fabiola Meireles Vilaça, Igor Wandekochen Bittencourt, Rafael Vieira de Almeida
  * @see io.github.scheduleguide.domain.Conteudo
  */
+@Entity
 public class Material {
+	/** Identificador deste material, para armazenamento no banco de dados. */
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+
 	/** Nome deste material, usado para apresentação ao usuário */
 	private String nome;
 

@@ -2,6 +2,12 @@ package io.github.scheduleguide.domain;
 
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 /** <i>Documentação da classe Categoria</i>.
  * 
  * <p>A classe categoria ocupa a maior posição na "hierarquia" de objetos relacionados ao conteúdo de estudo, sendo
@@ -11,11 +17,17 @@ import java.util.List;
  * 
  * @see io.github.scheduleguide.domain.Topico
  */
+@Entity
 public class Categoria {
+	/** Identificador desta categoria, para armazenamento no banco de dados. */
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+
 	/** Nome desta categoria, utilizada para apresentá-la ao usuário. */
 	private String nome;
 
 	/** Lista de tópicos pertencentes a esta categoria, inicialmente vazia. */
+	@OneToMany(mappedBy="categoria")
 	private List<Topico> topicos;
 
 

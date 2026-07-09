@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,7 +47,7 @@ public class Topico {
 	private boolean ativo;
 
 	/** Lista de conteúdos que pertencem a este tópico. */
-	@OneToMany(mappedBy="topico")
+	@OneToMany(mappedBy="topico", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Conteudo> conteudos = new ArrayList<>();
 
 	/** Categoria a que pertence este tópico, para melhor filtragem. */

@@ -2,10 +2,15 @@ package io.github.scheduleguide.domain;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 /** <i>Documentação da classe Material.</i>
  * 
  * <p>A classe material é a forma do usuário centralizar materiais de apoio ao estudo
@@ -27,13 +32,32 @@ public class Material {
 	/** Link relacionado a este material, atributo opcional e inicialmente nulo. */
 	private String link;
 
+	/** Conteudo a que pertence este material, para ter noção de pertencimento. */
+	@ManyToOne
+	private Conteudo conteudo;
+
+	/**
+	 * Constrói um novo objeto da classe <code>Material</code>, com os valores padrão.
+	 * <p>
+	 * Este <code>Material</code> é construída com o nome sendo uma string vazia, e
+	 * o link e conteudo sendo <code>null</code>.
+	 * <br>
+	 * Este construtor é utilizado na leitura de requisições.
+	 * 
+	 */
+	@JsonCreator
+	public Material() {
+		nome = "";
+		conteudo = null;
+	}
 
 	/** Constrói um material com apenas nome, mantendo o link <code>null</code>.
 	 * 
 	 * @param _nome Nome deste material.
 	 */
-	public Material(String _nome){
+	public Material(String _nome, Conteudo _conteudo){
 		nome = _nome;
+		conteudo = _conteudo;
 	}
 
 	/** Constrói um material com ambos nome e link, a partir dos parâmetros recebidos.
@@ -41,9 +65,27 @@ public class Material {
 	 * @param _nome Nome deste material.
 	 * @param _link Link relacionado a este material, aberto ao clicar no nome.
 	 */
-	public Material(String _nome, String _link){
+	public Material(String _nome, Conteudo _conteudo, String _link){
 		nome = _nome;
 		link = _link;
+		conteudo = _conteudo;
+	}
+
+	/** Retorna o identificador deste <code>Material</code>.
+	 * <p>
+	 * Esse valor será utilizado como identificador deste <code>Material</code> em requisições.
+	 * @return Identificador deste <code>Material</code>
+	 */
+	public long getId() {
+		return id;
+	}
+	/** Atualiza o identificador deste <code>Material</code>.
+	 * <p>
+	 * Um valor novo corresponderá a uma entrada diferente no banco de dados e objetos associados.
+	 * @param id Identificador a ser atualizado
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/** Retorna o nome deste <code>Material</code>, para apresentação ao usuário
@@ -70,5 +112,22 @@ public class Material {
 	 */
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	/** Retorna o {@link Conteudo} a que este <code>Material</code> pertence.
+	 * 
+	 * @return Conteudo relacionado
+	 */
+	@JsonIgnore
+	public Conteudo getConteudo() {
+		return conteudo;
+	}
+
+	/** Atualiza o {@link Conteudo} a que este <code>Material</code> pertence.
+	 * @param cont Novo conteúdo a ser salvo no atributo.
+	 */
+	@JsonProperty("conteudo")
+	public void setConteudo(Conteudo cont) {
+		this.conteudo = cont;
 	}
 }

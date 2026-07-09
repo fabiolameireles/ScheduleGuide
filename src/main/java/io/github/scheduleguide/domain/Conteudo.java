@@ -67,6 +67,7 @@ public class Conteudo {
 		nivelDeDominio = 0;
 		anotacoes = "";
 		ativo = true;
+		topico = null;
 	}
 
 	/** Constrói um novo objeto da classe <code>Conteudo</code>, a partir dos parâmetros recebidos.

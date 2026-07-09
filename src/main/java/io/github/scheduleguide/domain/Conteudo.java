@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,7 +47,7 @@ public class Conteudo {
 	private boolean ativo;
 
 	/** Lista de materiais relacionados a este conteúdo. */
-	@OneToMany
+	@OneToMany(mappedBy="conteudo", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Material> materiais = new ArrayList<Material>();
 
 	/** Tópico a que este conteúdo pertence. */
@@ -199,6 +201,7 @@ public class Conteudo {
 	/** Atualiza o {@link Topico} a que este <code>Conteudo</code> está relacionado.
 	 * @param topico Novo tópico a ser salvo no atributo.
 	 */
+	@JsonProperty("topico")
 	public void setTopico(Topico topico) {
 		this.topico = topico;
 	}

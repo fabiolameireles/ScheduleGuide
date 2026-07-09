@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${'Conteúdos de ' + topico.nome + ' - ScheduleGuide'}">Conteúdos de Tópico — ScheduleGuide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+    <input type="hidden" id="topicoId" th:value="${topico.id}" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script type="module" src="/topicos-conteudos.js"></script>
+    
+    <div th:replace="~{fragments/header :: header}">Header</div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 th:text="'Conteúdos de ' + ${topico.nome}">Nome do Tópico</h1>
+      </div>
+      <div class="row justify-content-center">
+        <h2 class="col ms-5">Conteúdos</h2>
+        <button type="button" class="btn btn-primary col-2 me-5" data-bs-toggle="modal" data-bs-target="#novoCont">Novo Conteudo</button>
+        <div class="modal fade" id="novoCont" data-bs-backdrop="static" tabindex="-1" aria-labelledby="novoContLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="novoContLabel">Novo Conteudo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="novoContNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="novoContNome">
+                  <label for="novoContDificuldade" class="form-label">Nível de Dificuldade</label>
+                  <input class="form-control" type="number" id="novoContDificuldade">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCriarCont" data-bs-dismiss="modal" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <!-- <h2 class="col ms-5">Tópicos</h2> -->
+        <!-- <button type="button" class="btn btn-primary col-2 me-5" data-bs-toggle="modal" data-bs-target="#novoTop">Novo Tópico</button> -->
+        <div class="modal fade" id="novoMat" data-bs-backdrop="static" tabindex="-1" aria-labelledby="novoMatLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="novoMatLabel">Novo Material</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="novoMatNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="novoMatNome">
+                  <label for="novoMatLink" class="form-label">Link</label>
+                  <input class="form-control" type="text" id="novoMatLink">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCriarMat" data-bs-dismiss="modal" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-9 mb-3" id="listaCont"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import {criarConteudo} from "/topicos-conteudos.js";
+
+      const btnCriarCont = document.getElementById('btnCriarCont');
+
+      function criarCont() {
+        criarConteudo();
+      }
+
+      btnCriarCont.addEventListener("click", criarCont);
+    </script>
+    <script>
+      const modalCont = document.getElementById('novoCont');
+      const text = modalCont.querySelector('#novoContNome');
+      const dificuldade = modalCont.querySelector('#novoContDificuldade');
+
+      function limparTexto() {
+        text.value = "";
+        dificuldade.value = 0;
+      }
+
+      modalCont.addEventListener('hidden.bs.modal', limparTexto);
+    </script>
+
+    <script type="module">
+      import {criarMaterial} from "/topicos-conteudos.js";
+
+      const btnCriarMat = document.getElementById('btnCriarMat');
+
+      function criarMat() {
+        criarMaterial();
+      }
+
+      btnCriarMat.addEventListener("click", criarMat);
+    </script>
+    <script>
+      const modalMat = document.getElementById('novoMat');
+      const textMat = modalMat.querySelector('#novoMatNome');
+      const linkMat = modalMat.querySelector('#novoMatLink');
+
+      function limparTexto() {
+        textMat.value = "";
+        linkMat.value = "";
+      }
+
+      modalMat.addEventListener('hidden.bs.modal', limparTexto);
+    </script>
+
+    <script>
+      const modalNovoMat = document.getElementById('novoMat');
+      
+      modalNovoMat.addEventListener('show.bs.modal', function (event) {
+        const botaoClicado = event.relatedTarget;
+        const conteudoId = botaoClicado.getAttribute('data-bs-catid');
+        
+        modalNovoMat.setAttribute('data-current-cat-id', conteudoId);
+      });
+    </script>
+  </body>
+</html>

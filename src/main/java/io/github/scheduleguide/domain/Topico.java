@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -232,6 +233,7 @@ public class Topico {
 	 * "Sem Categoria" a padrão, em caso de nenhuma específica selecionada.
 	 * @param categoria Nova categoria a ser registrada.
 	 */
+	@JsonProperty("categoria")
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}

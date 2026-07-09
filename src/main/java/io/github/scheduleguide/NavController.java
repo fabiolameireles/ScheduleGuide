@@ -3,10 +3,13 @@ package io.github.scheduleguide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.github.scheduleguide.domain.Conteudo;
+import io.github.scheduleguide.domain.Topico;
 import io.github.scheduleguide.repository.TopicoRepository;
 import io.github.scheduleguide.repository.ConteudoRepository;
 
@@ -26,6 +29,17 @@ public class NavController {
     @RequestMapping("/topicos")
     public String navegarParaTopicos() {
         return "topicos";
+    }
+    
+    @GetMapping("/topicos/conteudos")
+    public String paginaConteudos(@RequestParam("topicoId") Long topicoId, Model model) {
+        if (repoTopico.existsById(topicoId)){
+            Topico top = repoTopico.findById(topicoId).orElse(null);
+            model.addAttribute("topico", top);
+            return "topicos-conteudos";
+        } else {
+            return "topicos";
+        }
     }
 
     @RequestMapping("/cronograma")
@@ -54,4 +68,5 @@ public class NavController {
             return "estudo";
         }
     }
+
 }

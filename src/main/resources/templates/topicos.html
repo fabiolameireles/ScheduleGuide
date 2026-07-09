@@ -39,6 +39,31 @@
         </div>
       </div>
       <div class="row justify-content-center">
+        <!-- <h2 class="col ms-5">Tópicos</h2> -->
+        <!-- <button type="button" class="btn btn-primary col-2 me-5" data-bs-toggle="modal" data-bs-target="#novoTop">Novo Tópico</button> -->
+        <div class="modal fade" id="novoTop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="novoTopLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="novoTopLabel">Novo Tópico</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="novoTopNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="novoTopNome">
+                  <label for="novoTopImagem" class="form-label">Imagem (Link)</label>
+                  <input class="form-control" type="text" id="novoTopImagem">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCriarTop" data-bs-dismiss="modal" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
         <div class="col-9 mb-3" id="listaCat"></div>
       </div>
     </div>
@@ -63,6 +88,41 @@
       }
 
       modalCat.addEventListener('hidden.bs.modal', limparTexto);
+    </script>
+
+    <script type="module">
+      import {criarTopico} from "./topicos.js";
+
+      const btnCriarTop = document.getElementById('btnCriarTop');
+
+      function criarTop() {
+        criarTopico();
+      }
+
+      btnCriarTop.addEventListener("click", criarTop);
+    </script>
+    <script>
+      const modalTop = document.getElementById('novoTop');
+      const textTop = modalTop.querySelector('#novoTopNome');
+      const imageTop = modalTop.querySelector('#novoTopImagem');
+
+      function limparTexto() {
+        textTop.value = "";
+        imageTop.value = "";
+      }
+
+      modalTop.addEventListener('hidden.bs.modal', limparTexto);
+    </script>
+
+    <script>
+      const modalNovoTop = document.getElementById('novoTop');
+      
+      modalNovoTop.addEventListener('show.bs.modal', function (event) {
+        const botaoClicado = event.relatedTarget;
+        const categoriaId = botaoClicado.getAttribute('data-bs-catid');
+        
+        modalNovoTop.setAttribute('data-current-cat-id', categoriaId);
+      });
     </script>
   </body>
 </html>

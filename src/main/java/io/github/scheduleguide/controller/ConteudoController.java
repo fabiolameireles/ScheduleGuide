@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import io.github.scheduleguide.domain.Conteudo;
 import io.github.scheduleguide.repository.ConteudoRepository;
+import io.github.scheduleguide.repository.TopicoRepository;
 
 /**
  * <i>Documentação da classe ConteudoController</i>.
@@ -35,6 +36,9 @@ public class ConteudoController {
     /** Repositório CRUD para gestão de conteudos, responsável por implementar a persistência dos objetos. */
     @Autowired
     private ConteudoRepository repoConteudo;
+
+    @Autowired
+    private TopicoRepository repoTopico;
 
     /**
      * Retorna uma lista com cada {@link Conteudo} presente no banco de dados.
@@ -119,5 +123,18 @@ public class ConteudoController {
         }
     }
 
-    
+    /**
+     * Retorna a lista de {@link Conteudo} pertencentes a um tópico, se existir.
+     * 
+     * @param id deve corresponder a uma entrada no banco de dados
+     * @return a lista de <code>Conteudo</code> correspondente
+     * @throws ResponseStatusException se não há um <code>Conteudo</code> associado ao identificador
+     */
+    @GetMapping("/lista/{id}")
+    public List<Conteudo> getConteudoByTopicoId(@PathVariable(name="id") Long id) {
+        if (!repoTopico.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        else
+            return repoConteudo.findByTopicoId(id);
+    }
 }

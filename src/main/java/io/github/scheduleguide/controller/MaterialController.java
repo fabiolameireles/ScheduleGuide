@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import io.github.scheduleguide.domain.Material;
 import io.github.scheduleguide.repository.MaterialRepository;
+import io.github.scheduleguide.repository.ConteudoRepository;
 
 /**
  * <i>Documentação da classe MaterialController</i>.
@@ -35,6 +36,9 @@ public class MaterialController {
     /** Repositório CRUD para gestão de materiais, responsável por implementar a persistência dos objetos. */
     @Autowired
     private MaterialRepository repoMaterial;
+
+    @Autowired
+    private ConteudoRepository repoConteudo;
     
     /**
      * Retorna uma lista com cada {@link Material} presente no banco de dados.
@@ -116,5 +120,13 @@ public class MaterialController {
 
             repoMaterial.delete(mat);
         }
+    }
+
+    @GetMapping("/lista/{id}")
+    public List<Material> getMaterialByConteudoId(@PathVariable(name="id") Long id) {
+        if (!repoConteudo.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        else
+            return repoMaterial.findByConteudoId(id);
     }
 }

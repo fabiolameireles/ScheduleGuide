@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.github.scheduleguide.domain.Conteudo;
 import io.github.scheduleguide.domain.Topico;
 import io.github.scheduleguide.repository.TopicoRepository;
+import io.github.scheduleguide.repository.CategoriaRepository;
 
 /**
  * <i>Documentação da classe TopicoController</i>.
@@ -35,6 +37,9 @@ public class TopicoController {
     /** Repositório CRUD para gestão de tópicos, responsável por implementar a persistência dos objetos. */
     @Autowired
     private TopicoRepository repoTopico;
+
+    @Autowired
+    private CategoriaRepository repoCategoria;
     
     /**
      * Retorna uma lista com cada {@link Topico} presente no banco de dados.
@@ -119,5 +124,20 @@ public class TopicoController {
     public Topico postTopico(@RequestBody Topico t) {
         repoTopico.save(t);
         return t;
+    }
+
+    /**
+     * Retorna a lista de {@link Topico} pertencentes a uma categoria, se existir.
+     * 
+     * @param id deve corresponder a uma entrada no banco de dados
+     * @return a lista de <code>Topico</code> correspondente
+     * @throws ResponseStatusException se não há um <code>Topico</code> associado ao identificador
+     */
+    @GetMapping("/lista/{id}")
+    public List<Topico> getTopicoByCategoriaId(@PathVariable(name="id") Long id) {
+        if (!repoCategoria.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        else
+            return repoTopico.findByCategoriaId(id);
     }
 }

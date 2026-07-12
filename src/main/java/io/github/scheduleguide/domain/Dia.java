@@ -2,7 +2,15 @@ package io.github.scheduleguide.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 /** <i>Documentação da classe Dia.</i>
  * 
@@ -13,6 +21,10 @@ import java.util.List;
  * @see io.github.scheduleguide.domain.Intervalo
  */
 public class Dia {
+	/** Identificador deste conteúdo, para armazenamento no banco de dados. */
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	
 	/** Data deste dia, definida pelo usuário a partir do calendário do site. */
 	private LocalDate data;
 
@@ -20,10 +32,24 @@ public class Dia {
 	private DayOfWeek diaDaSemana;
 
 	/** Lista de intervalos disponíveis para serem atribuídos a algum período de foco ou descanso. */
-	private List<Intervalo> intervalos;
+	private List<Intervalo> intervalos = new ArrayList<Intervalo>();
+
+	/**
+	 * Constrói um novo objeto da classe <code>Dia</code>, com os valores padrão.
+	 * <p>
+	 * Este <code>Dia</code> é construído com a data atual
+	 * <p>
+	 * Este construtor é utilizado na leitura de requisições.
+	 * 
+	 */
+	@JsonCreator
+	public Dia() {
+		data = LocalDate.now();
+		diaDaSemana = data.getDayOfWeek();
+	}
 
 	/** Constrói um novo objeto de <code>Dia</code>, a partir dos parâmetros recebidos.
-	 * <br><br>
+	 * <p>
 	 * O dia da semana é inferido da data passada como parâmetro.
 	 * 
 	 * @param _data Data deste dia sendo criado
@@ -34,6 +60,23 @@ public class Dia {
 		diaDaSemana = data.getDayOfWeek();
 
 		intervalos = _intervalos;
+	}
+
+	/** Retorna o identificador deste <code>Dia</code>.
+	 * <p>
+	 * Esse valor será utilizado como identificador deste <code>Dia</code> em requisições.
+	 * @return Identificador deste <code>Dia</code>
+	 */
+	public long getId() {
+		return id;
+	}
+	/** Atualiza o identificador deste <code>Dia</code>.
+	 * <p>
+	 * Um valor novo corresponderá a uma entrada diferente no banco de dados e objetos associados.
+	 * @param id Identificador a ser atualizado
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/** Retorna a data a que este <code>Dia</code> se refere.
@@ -60,6 +103,7 @@ public class Dia {
 	/** Retorna a lista de intervalos criados neste <code>Dia</code>.
 	 * @return Lista de intervalos
 	 */
+	@JsonIgnore
 	public List<Intervalo> getIntervalos() {
 		return intervalos;
 	}
@@ -80,7 +124,7 @@ public class Dia {
 	}
 
 	/** Atualiza um {@link Intervalo} específico presente na lista a partir de seu índice.
-	 * <br><br>
+	 * <p>
 	 * O <code>indice_intervalo</code> deve estar dentro dos limites da lista de intervalos. A função não fará nada em caso contrário.
 	 * 
 	 * @param indice_intervalo Índice do intervalo a ser atualizado.
@@ -95,7 +139,7 @@ public class Dia {
 	}
 
 	/** Remove um {@link Intervalo} da lista de intervalos a partir de seu índice.
-	 * <br><br>
+	 * <p>
 	 * O <code>indice_intervalo</code> deve estar dentro dos limites da lista de intervalos. A função não fará nada em caso contrário.
 	 * @param indice_intervalo Índice do intervalo a ser removido.
 	 */

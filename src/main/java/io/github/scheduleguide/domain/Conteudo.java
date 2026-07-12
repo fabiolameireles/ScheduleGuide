@@ -1,13 +1,6 @@
 package io.github.scheduleguide.domain;
 
 import java.util.List;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 /** <i>Documentação da classe Conteúdo.</i>
  * 
  * <p>A classe de conteúdo engloba um elemento de uma lista pertencente a um tópico, sendo uma maior especificação
@@ -19,12 +12,7 @@ import jakarta.persistence.OneToMany;
  * @see io.github.scheduleguide.domain.Topico
  * @see io.github.scheduleguide.domain.Material
  */
-@Entity
 public class Conteudo {
-	/** Identificador deste conteúdo, para armazenamento no banco de dados. */
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	
 	/** Nome deste conteúdo, usado para apresentação ao usuário do sistema. */
 	private String nome;
 
@@ -41,11 +29,9 @@ public class Conteudo {
 	private boolean ativo;
 
 	/** Lista de materiais relacionados a este conteúdo. */
-	@OneToMany
 	private List<Material> materiais;
 
 	/** Tópico a que este conteúdo pertence. */
-	@ManyToOne
 	private Topico topico;
 
 

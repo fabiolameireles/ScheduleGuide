@@ -1,17 +1,6 @@
 package io.github.scheduleguide.domain;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 /** <i>Documentação da classe Tópico</i>.
  * 
@@ -24,13 +13,8 @@ import jakarta.persistence.OneToMany;
  * @see io.github.scheduleguide.domain.Categoria
  * @see io.github.scheduleguide.domain.Conteudo
  */
-@Entity
 public class Topico {
-	/** Identificador deste tópico, para armazenamento no banco de dados. */
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
-	/** Nome deste tópico, para apresentação ao usuário do sistema. */
+	/** Nome dese tópico, para apresentação ao usuário do sistema. */
 	private String nome;
 
 	/** Caminho para imagem deste tópico, para melhor visualização pelo usuário do sistema. */
@@ -46,31 +30,11 @@ public class Topico {
 	private boolean ativo;
 
 	/** Lista de conteúdos que pertencem a este tópico. */
-	@OneToMany(mappedBy="topico")
-	private List<Conteudo> conteudos = new ArrayList<>();
+	private List<Conteudo> conteudos;
 
 	/** Categoria a que pertence este tópico, para melhor filtragem. */
-	@ManyToOne
 	private Categoria categoria;
 
-
-	/**
-	 * Constrói um novo objeto da classe <code>Topico</code>, com os valores padrão.
-	 * <p>
-	 * Este <code>Topico</code> é construído com nome e caminho para imagem vazios,
-	 * prioridade alta, ativo e sem categoria.
-	 * <br>
-	 * Este construtor é utilizado na leitura de requisições.
-	 * 
-	 */
-	@JsonCreator
-	public Topico() {
-		nome = "";
-		imagem = "";
-		prioridade = Prioridade.ALTA;
-		ativo = true;
-		categoria = null;
-	}
 
 	/** Constrói um novo objeto da classe <code>Topico</code>, a partir dos parâmetros recebidos.
 	 * <br><br>
@@ -92,25 +56,8 @@ public class Topico {
 		ativo = true;
 	}
 
-	/** Retorna o identificador deste <code>Topico</code>.
-	 * <p>
-	 * Esse valor deve ser utilizado pela categoria associada a este <code>Topico</code>.
-	 * @return Identificador deste <code>Topico</code>
-	 */
-	public long getId() {
-		return id;
-	}
-	/** Atualiza o identificador deste <code>Topico</code>.
-	 * <p>
-	 * Um valor novo corresponderá a uma entrada diferente no banco de dados e objetos associados.
-	 * @param id Identificador a ser atualizado
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	/** Retorna o nome salvo deste <code>Topico</code>.
-	 * <p>
+	 * <br><br>
 	 * Este nome serve apenas para apresentação ao usuário.
 	 * @return Nome salvo deste <code>Topico</code>
 	 */
@@ -118,7 +65,7 @@ public class Topico {
 		return nome;
 	}
 	/** Atualiza o nome deste <code>Topico</code>.
-	 * <p>
+	 * <br><br>
 	 * Este nome serve apenas para apresentação ao usuário.
 	 * @param nome Nome a ser atualizado
 	 */
@@ -127,7 +74,7 @@ public class Topico {
 	}
 
 	/** Retorna o caminho para a imagem deste <code>Topico</code>.
-	 * @return Caminho salvo para a imagem deste <code>Topico</code>
+	 * @return Caminho salvo para a imagem deste <code>Topico</code>.
 	 */
 	public String getImagem() {
 		return imagem;
@@ -153,15 +100,15 @@ public class Topico {
 	}
 
 	/** Retorna se este <code>Topico</code> está ativo
-	 * <p>
+	 * <br><br>
 	 * Um <code>Topico</code> ativo pode ter seus objetos {@link Conteudo} alocados a objetos {@link PeriodoFoco}, se estes também estiverem ativos.
-	 * @return <code>true</code> se estiver ativo, <code>false</code> em caso contrário
+	 * @return <code>true</code> se estiver ativo, <code>false</code> em caso contrário.
 	 */
 	public boolean isAtivo() {
 		return ativo;
 	}
 	/** Atualiza se o <code>Topico</code> está ou não ativo.
-	 * <p>
+	 * <br><br>
 	 * Um <code>Topico</code> que é desativado não tem seus objetos {@link Conteudo} removidos de objetos {@link PeriodoFoco} existentes.
 	 * @param valor Novo valor de eligibilidade
 	 */
@@ -172,7 +119,6 @@ public class Topico {
 	/** Retorna a lista de conteúdos relacionados a este <code>Topico</code>.
 	 * @return Lista de conteúdos.
 	 */
-	@JsonIgnore
 	public List<Conteudo> getConteudos() {
 		return conteudos;
 	}
@@ -193,7 +139,7 @@ public class Topico {
 	}
 
 	/** Atualiza um {@link Conteudo} específico presente na lista a partir de seu índice.
-	 * <p>
+	 * <br><br>
 	 * O <code>indice_conteudo</code> deve estar dentro dos limites da lista de conteúdos. A função não fará nada em caso contrário.
 	 * 
 	 * @param indice_conteudo Índice do conteudo a ser atualizado.
@@ -208,7 +154,7 @@ public class Topico {
 	}
 
 	/** Remove um {@link Conteudo} da lista de conteúdos a partir de seu índice.
-	 * <p>
+	 * <br><br>
 	 * O <code>indice_conteudo</code> deve estar dentro dos limites da lista de conteúdos. A função não fará nada em caso contrário.
 	 * @param indice_conteudo Índice do conteúdo a ser removido.
 	 */
@@ -221,12 +167,11 @@ public class Topico {
 	/** Retorna a categoria a que este <code>Topico</code> pertence.
 	 * @return Categoria relacionada
 	 */
-	@JsonIgnore
 	public Categoria getCategoria() {
 		return categoria;
 	}
 	/** Atualiza a categoria a que este código pertence.
-	 * <p>
+	 * <br><br>
 	 * Um tópico sempre está relacionado a alguma categoria, sendo a categoria
 	 * "Sem Categoria" a padrão, em caso de nenhuma específica selecionada.
 	 * @param categoria Nova categoria a ser registrada.

@@ -1,6 +1,10 @@
 package io.github.scheduleguide.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,12 +46,29 @@ public class Conteudo {
 
 	/** Lista de materiais relacionados a este conteúdo. */
 	@OneToMany
-	private List<Material> materiais;
+	private List<Material> materiais = new ArrayList<Material>();
 
 	/** Tópico a que este conteúdo pertence. */
 	@ManyToOne
 	private Topico topico;
 
+	/**
+	 * Constrói um novo objeto da classe <code>Conteudo</code>, com os valores padrão.
+	 * <p>
+	 * Este <code>Conteudo</code> é construído com o nome e anotações sendo strings vazias,
+	 * nível de domínio com valor 0 e a flag <code>ativo</code> verdadeira.
+	 * <br>
+	 * Este construtor é utilizado na leitura de requisições.
+	 * 
+	 */
+	@JsonCreator
+	public Conteudo() {
+		nome = "";
+		nivelDeDominio = 0;
+		anotacoes = "";
+		ativo = true;
+		topico = null;
+	}
 
 	/** Constrói um novo objeto da classe <code>Conteudo</code>, a partir dos parâmetros recebidos.
 	 * <br><br>
@@ -69,8 +90,25 @@ public class Conteudo {
 		ativo = true;
 	}
 
+	/** Retorna o identificador deste <code>Conteudo</code>.
+	 * <p>
+	 * Esse valor será utilizado como identificador deste <code>Conteudo</code> em requisições.
+	 * @return Identificador deste <code>Conteudo</code>
+	 */
+	public long getId() {
+		return id;
+	}
+	/** Atualiza o identificador deste <code>Conteudo</code>.
+	 * <p>
+	 * Um valor novo corresponderá a uma entrada diferente no banco de dados e objetos associados.
+	 * @param id Identificador a ser atualizado
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	/** Retorna o nome salvo deste <code>Conteudo</code>.
-	 * <br><br>
+	 * <p>
 	 * Este nome serve apenas para apresentação ao usuário.
 	 * @return Nome salvo deste <code>Conteudo</code>
 	 */
@@ -78,7 +116,7 @@ public class Conteudo {
 		return nome;
 	}
 	/** Atualiza o nome deste <code>Conteudo</code>.
-	 * <br><br>
+	 * <p>
 	 * Este nome serve apenas para apresentação ao usuário.
 	 * @param nome Nome a ser atualizado
 	 */
@@ -121,7 +159,7 @@ public class Conteudo {
 	}
 
 	/** Retorna se este <code>Conteudo</code> está ativo
-	 * <br><br>
+	 * <p>
 	 * Um <code>Conteudo</code> ativo pode ser alocado a um {@link PeriodoFoco} se o {@link Topico} a que pertence também estiver.
 	 * @return <code>true</code> se estiver ativo, <code>false</code> em caso contrário.
 	 */
@@ -129,7 +167,7 @@ public class Conteudo {
 		return ativo;
 	}
 	/** Atualiza se o <code>Conteudo</code> está ou não ativo.
-	 * <br><br>
+	 * <p>
 	 * Um <code>Conteudo</code> que é desativado não é removido de objetos {@link PeriodoFoco} a que já estava alocado.
 	 * @param valor Novo valor de ativo
 	 */
@@ -140,6 +178,7 @@ public class Conteudo {
 	/** Retorna a lista de materiais relacionados a este <code>Conteudo</code>.
 	 * @return A lista de materiais.
 	 */
+	@JsonIgnore
 	public List<Material> getMateriais() {
 		return materiais;
 	}
@@ -153,6 +192,7 @@ public class Conteudo {
 	/** Retorna o {@link Topico} a que este <code>Conteudo</code> está relacionado.
 	 * @return Tópico relacionado.
 	 */
+	@JsonIgnore
 	public Topico getTopico() {
 		return topico;
 	}
@@ -173,7 +213,7 @@ public class Conteudo {
 	}
 
 	/** Atualiza um {@link Material} específico presente na lista a partir de seu índice.
-	 * <br><br>
+	 * <p>
 	 * O <code>indice_material</code> deve estar dentro dos limites da lista de materiais. A função não fará nada em caso contrário.
 	 * 
 	 * @param indice_material Índice do material a ser atualizado.
@@ -188,7 +228,7 @@ public class Conteudo {
 	}
 
 	/** Remove um {@link Material} da lista de materiais a partir de seu índice.
-	 * <br><br>
+	 * <p>
 	 * O <code>indice_material</code> deve estar dentro dos limites da lista de materiais. A função não fará nada em caso contrário.
 	 * @param indice_material Índice do material a ser removido.
 	 */

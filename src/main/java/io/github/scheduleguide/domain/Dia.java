@@ -20,7 +20,7 @@ import jakarta.persistence.OneToMany;
  * disponíveis nos quais o algoritmo do cronograma de estudos possa atuar neste dia.</p>
  * 
  * @author Fabiola Meireles Vilaça, Igor Wandekochen Bittencourt, Rafael Vieira de Almeida
- * @see io.github.scheduleguide.domain.Dia
+ * @see io.github.scheduleguide.domain.Intervalo
  */
 @Entity
 public class Dia {

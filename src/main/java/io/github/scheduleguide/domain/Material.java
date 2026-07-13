@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -125,6 +126,7 @@ public class Material {
 	/** Atualiza o {@link Conteudo} a que este <code>Material</code> pertence.
 	 * @param cont Novo conteúdo a ser salvo no atributo.
 	 */
+	@JsonProperty("conteudo")
 	public void setConteudo(Conteudo cont) {
 		this.conteudo = cont;
 	}

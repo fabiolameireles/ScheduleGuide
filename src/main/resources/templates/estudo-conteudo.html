@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ScheduleGuide — Estudo de Conteúdo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script type="module" src="/estudo-conteudo.js"></script>
+    
+    <div th:replace="~{fragments/header :: header}">Header</div>
+    <div class row justify-content-center>
+      <h1 th:text="'Estudando Conteúdo: ' + ${conteudo.nome}" class="text-center">Titulo do conteudo</h1>
+    </div>
+
+        <div class="row g-4">
+            
+            <!-- LISTA DE MATERIAIS -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-light fw-bold">
+                        <i class="bi bi-folder2-open me-2"></i> Materiais de Apoio
+                    </div>
+                    <div class="card-body">
+                        
+                        <div th:if="${conteudo.materiais == null or conteudo.materiais.isEmpty()}" class="text-muted fst-italic">
+                            Nenhum material complementar anexado a este conteúdo.
+                        </div>
+                        
+                        <div class="list-group" th:unless="${conteudo.materiais == null or conteudo.materiais.isEmpty()}">
+                            <div th:each="material : ${conteudo.materiais}" 
+                               class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="text-start">
+                                    <span th:text="${material.nome}">Nome do Material</span>
+                                    <a th:href="${material.link.present ? material.link.get() : '#'}"  
+                                      target="_blank"  
+                                      th:if="${material.link.present}" 
+                                      th:text="${material.link.get()}"
+                                      class="d-block small text-decoration-none mt-1">Link do Material
+                                    </a>
+                                </div>
+                              </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANOTAÇÕES -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-light fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i> Minhas Anotações
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group h-100">
+                            <textarea class="form-control" 
+                                      id="anotacoes" 
+                                      name="anotacoes" 
+                                      rows="8" 
+                                      placeholder="Digite suas observações e notas de estudo aqui..."
+                                      th:data-id="${conteudo.id}"
+                                      th:text="${conteudo.anotacoes}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTOES DE CONTROLE -->
+        <div class="row mt-4">
+            <div class="col-12 d-flex justify-content-end gap-2">
+                <span id="texto-save" class="text-muted align-self-center me-2" style="display: none;"></span>
+
+                <a href="/topicos" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+
+                <button type="submit" id="btn-salvar-anotacoes" class="btn btn-success">
+                    <i class="bi bi-check-circle me-1"></i> Salvar Alterações
+                </button>
+            </div>
+        </div>
+
+  </body>
+</html>

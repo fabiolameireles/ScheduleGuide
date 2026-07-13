@@ -18,24 +18,27 @@ async function exibirTopicosPorCategoria() {
     for (let i = 0; i < catData.length; i++) {
         cats += `  <div class="accordion-item" id="cat${catData[i].id}">
     <h2 class="accordion-header" id="catHeader${catData[i].id}">
-      <button type="button" class="accordion-button collapsed col" data-bs-toggle="collapse" data-bs-target="#catBody${catData[i].id}" id="catButton${catData[i].id}" aria-expanded="false" aria-controls="catBody${catData[i].id}">
+      <button type="button" class="accordion-button col collapsed" data-bs-toggle="collapse" data-bs-target="#catBody${catData[i].id}" id="catButton${catData[i].id}" aria-expanded="false" aria-controls="catBody${catData[i].id}">
         ${catData[i].nome}
-      </button>
-      <button type="button" class="btn btn-primary col" data-bs-toggle="modal" data-bs-target="#criarTop" data-bs-cat="${catData[i].id}">
-        Criar Tópico
       </button>
     </h2>
     <div id="catBody${catData[i].id}" class="accordion-collapse collapse" aria-labelledby="catHeader${catData[i].id}">
       <div class="accordion-body">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+          <span class="text-muted">Tópicos desta categoria</span>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${catData[i].id}">
+            + Adicionar Tópico
+          </button>
+        </div>
         <div class="row justify-content-center" id="catList${catData[i].id}">`;
-        const topData = await axios.get(`/interno/topicos/cat/${catData[i].id}/`).then((topResponse) => topResponse.data).catch(function (topError) {
+        let topData = await axios.get(`/interno/topicos/cat/${catData[i].id}`).then((topResponse) => topResponse.data).catch(function (topError) {
             console.log(topError);
         });
 
         for (let j = 0; j < topData.length; j++) {
             cats += `          <div class="col-4" id="top${topData[j].id}">
             <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop">
-              <img id="topImagem${topData[j].id}" src="${topData[j].imagem}" class="img-thumbnail">
+              <img id="topImagem${topData[j].id}" src="${topData[j].imagem}" class="img-fluid img-thumbnail">
               <p id="topNome${topData[j].id}">${topData[j].nome}</p>
               <p hidden id="topCat${topData[j].id}">${catData[i].id}</p>
             </button>
@@ -44,7 +47,7 @@ async function exibirTopicosPorCategoria() {
         }
 
         if (topData.length == 0)
-            cats += "        <p class='text-start'>Ainda não há tópicos presentes</p>"
+            cats += `        <p id=semTop${catData[i].id} class='text-start'>Ainda não há tópicos presentes</p>`;
 
         cats += `        </div>
       </div>
@@ -54,11 +57,28 @@ async function exibirTopicosPorCategoria() {
     }
 
     if (catData.length == 0)
-        cats += `  <p class='text-start'>Ainda não há categorias presentes</p>
+        cats += `  <p id=semCat class='text-start'>Ainda não há categorias presentes</p>
 `;
 
     cats += `</div>`;
     document.getElementById('listaCat').innerHTML = cats;
+}
+
+export function exibirOpcoesCategoria(idSelect) {
+    let select = `<option value="0">Nenhuma</option>
+`;
+
+    axios.get('/interno/categorias').then(function (response) {
+        const data = response.data;
+
+        for (let i = 0; i < data.length; i++)
+            select += `<option value="${data[i].id}">${data[i].nome}</option>
+`
+
+        document.getElementById(idSelect).innerHTML = select;
+    }).catch(function (catError) {
+        console.log(catError);
+    });
 }
 
 
@@ -67,15 +87,18 @@ function exibirNovaCategoria(catData) {
 
     const catStr = `<div class="accordion-item" id="cat${id}">
   <h2 class="accordion-header" id="catHeader${id}">
-    <button type="button" class"accordion-button collapsed col" data-bs-toggle="collapse" data-bs-target="#catBody${id}" id="catButton${id}" aria-expanded="false" aria-controls="catBody=${id}">
+    <button type="button" class="accordion-button col collapsed" data-bs-toggle="collapse" data-bs-target="#catBody${id}" id="catButton${id}" aria-expanded="false" aria-controls="catBody=${id}">
       ${catData.nome}
     </button>
-    <button type="button" class="btn btn-primary col" data-bs-toggle="modal" data-bs-target="#criarTop" data-bs-cat="${id}">
-      Criar Tópico
-    </button>
   </h2>
-  <div id="catBody${id}" class "accordion-collapse collapse" aria-labelledby="catHeader${id}">
+  <div id="catBody${id}" class="accordion-collapse collapse" aria-labelledby="catHeader${id}">
     <div class="accordion-body">
+      <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+        <span class="text-muted">Tópicos desta categoria</span>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${id}">
+          + Adicionar Tópico
+        </button>
+      </div>
       <div class="row content-justify-center" id="catList${id}">
         <p class='text-start'>Ainda não há tópicos presentes</p>
       </div>
@@ -83,28 +106,30 @@ function exibirNovaCategoria(catData) {
   </div>
 </div>`
 
-    const list = document.getElementById('listaCat');
+    const accordion = document.getElementById('catAccordion');
+    const semCat = accordion.querySelector('#semCat');
 
-    if (list.innerHTML === `<p class='text-start'>Ainda não há categorias presentes</p>`)
-        list.innerHTML = catStr;
-    else
-        list.innerHTML += catStr;
+    if (semCat != null)
+        semCat.remove();
+
+    accordion.innerHTML += catStr;
 }
 
 function exibirNovoTopicoEmCategoria(topData) {
     const topStr = `<div class="col-4" id="top${topData.id}>
   <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop">
-    <img src="${topData.imagem}" class="img-thumbnail">
+    <img src="${topData.imagem}" class="img-fluid img-thumbnail">
     <p>${topData.nome}</p>
   </button>
 </div>`
 
     const list = document.getElementById(`catList${topData.categoria}`);
+    const semTop = list.querySelector(`semTop${topData.categoria}`)
 
-    if (list.innerHTML === `<p class='text-start'>Ainda não há tópicos presentes</p>`)
-        list.innerHTML = topStr;
-    else
-        list.innerHTML += topStr;
+    if (semTop != null)
+        semTop.remove();
+
+    list.innerHTML += topStr;
 }
 
 

@@ -32,7 +32,27 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnCriarCat" data-bs-dismiss="modal" aria-label="Adicionar">Adicionar</button>
+                <button type="button" class="btn btn-primary" id="btnCriarCat" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="editarCat" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editarCatLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarCatLabel">Editar Categoria</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <input type="hidden" id="editarCatId" value="0">
+                  <label for="editarCatNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="editarCatNome">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnEditarCat" aria-label="Atualizar">Atualizar</button>
               </div>
             </div>
           </div>
@@ -40,6 +60,36 @@
       </div>
       <div class="row justify-content-center">
         <div class="col-9 mb-3" id="listaCat"></div>
+        <div class="modal fade" id="novoTop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="novoTopLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="novoTopLabel">Novo Topico</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <input type="hidden" id="novoTopId" value="0">
+                  <label for="novoTopNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="novoTopNome">
+                  <label for="novoTopImagem" class="form-label">Caminho para imagem</label>
+                  <input class="form-control" type="text" id="novoTopImagem">
+                  <label for="novoTopPrioridade" class="form-label">Prioridade</label>
+                  <select id="novoTopPrioridade">
+                    <option value="0">ALTA</option>
+                    <option value="1">MEDIA</option>
+                    <option value="2">BAIXA</option>
+                  </select>
+                  <label for="novoTopCat" class="form-label">Categoria</label>
+                  <select id="novoTopCat"></select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCriarTop" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -55,14 +105,63 @@
       btnCriarCat.addEventListener("click", criarCat);
     </script>
     <script>
-      const modalCat = document.getElementById('novaCat');
-      const text = modalCat.querySelector('#novaCatNome');
+      const novaCatModal = document.getElementById('novaCat');
+      const novaCatNome = novaCatModal.querySelector('#novaCatNome');
 
-      function limparTexto() {
-        text.value = "";
+      function limparCriacaoCategoria() {
+        novaCatNome.value = "";
       }
 
-      modalCat.addEventListener('hidden.bs.modal', limparTexto);
+      novaCatModal.addEventListener('hidden.bs.modal', limparCriacaoCategoria);
+    </script>
+    <script type="module">
+      import {editarCategoria} from "./topicos.js";
+
+      const btnEditarCat = document.getElementById('btnEditarCat');
+
+      function editarCat() {
+        editarCategoria();
+      }
+
+      btnEditarCat.addEventListener("click", editarCat);
+    </script>
+
+    <script type="module">
+      import {exibirOpcoesCategoria} from "./topicos.js"
+
+      novoTopModal.addEventListener('show.bs.modal', event => {
+        const opcaoBase = event.relatedTarget.getAttribute('data-bs-cat');
+
+        exibirOpcoesCategoria('novoTopCat');
+        document.getElementById('novoTopCat').value = opcaoBase;
+      });
+    </script>
+    <script type="module">
+      import {criarTopico} from "./topicos.js";
+
+      const btnCriarTop = document.getElementById('btnCriarTop');
+
+      function criarTop() {
+        criarTopico();
+      }
+
+      btnCriarTop.addEventListener("click", criarTop);
+    </script>
+    <script>
+      const novoTopModal = document.getElementById('novoTop');
+      const novoTopNome = novoTopModal.querySelector('#novoTopNome');
+      const novoTopImagem = novoTopModal.querySelector('#novoTopImagem');
+      const novoTopPrioridade = novoTopModal.querySelector('#novoTopPrioridade');
+      const novoTopCat = novoTopModal.querySelector('#novoTopCat');
+
+      function limparCriacaoTopico() {
+        novoTopNome.value = "";
+        novoTopImagem.value = "";
+        novoTopPrioridade.value = "";
+        novoTopCat.value = "";
+      }
+
+      novoTopModal.addEventListener('hidden.bs.modal', limparCriacaoTopico);
     </script>
   </body>
 </html>

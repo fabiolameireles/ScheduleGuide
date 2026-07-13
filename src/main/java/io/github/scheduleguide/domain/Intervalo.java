@@ -2,6 +2,16 @@ package io.github.scheduleguide.domain;
 
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
 /** <i>Documentação da classe Intervalo.</i>
  * 
  * <p>A classe intervalo define uma faixa de tempo, dentro de um dia, que pode ser usada
@@ -11,7 +21,12 @@ import java.time.LocalTime;
  * @see io.github.scheduleguide.domain.Dia
  * @see io.github.scheduleguide.domain.SessaoEstudo
  */
+@Entity
 public class Intervalo {
+	/** Identificador deste conteúdo, para armazenamento no banco de dados. */
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+
 	/** Nome deste intervalo, para apresentação ao usuário e apoio à organização. */
 	private String nome;
 
@@ -27,6 +42,27 @@ public class Intervalo {
 	 */
 	private boolean tempoReserva;
 
+	/** Dia a que esse intervalo está atrelado */	
+	@ManyToOne
+	private Dia dia;
+
+	/**
+	 * Constrói um novo objeto da classe <code>Intervalo</code>, com os valores padrão.
+	 * <p>
+	 * Este <code>Intervalo</code> é construído com nome vazio, horários iguais ao atual
+	 * e não sendo um tempo reserva
+	 * <p>
+	 * Este construtor é utilizado na leitura de requisições.
+	 * 
+	 */
+	@JsonCreator
+	public Intervalo() {
+		nome = "";
+		horarioInicio = LocalTime.now();
+		horarioFim = LocalTime.now();
+		tempoReserva = false;
+	}
+
 	/** Constrói um novo <code>Intervalo</code>, a partir dos parâmetros recebidos.
 	 * 
 	 * @param _nome Nome deste intervalo, para apresentação ao usuário.
@@ -41,6 +77,23 @@ public class Intervalo {
 		setHorarioFim(_horarioFim);
 
 		tempoReserva = _tempoReserva;
+	}
+
+	/** Retorna o identificador deste <code>Intervalo</code>.
+	 * <p>
+	 * Esse valor será utilizado como identificador deste <code>Intervalo</code> em requisições.
+	 * @return Identificador deste <code>Intervalo</code>
+	 */
+	public long getId() {
+		return id;
+	}
+	/** Atualiza o identificador deste <code>Intervalo</code>.
+	 * <p>
+	 * Um valor novo corresponderá a uma entrada diferente no banco de dados e objetos associados.
+	 * @param id Identificador a ser atualizado
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/** Retorna o nome salvo deste <code>Intervalo</code>, para apresentação ao usuário
@@ -114,5 +167,23 @@ public class Intervalo {
 	 */
 	public void setTempoReserva(boolean tempoReserva) {
 		this.tempoReserva = tempoReserva;
+	}
+
+	/** Retorna o dia relacionado a esse <code>Intervalo</code>
+	 * 
+	 * @return Dia relacionado
+	 */
+	@JsonIgnore
+	public Dia getDia(){
+		return dia;
+	}
+
+	/** Atualiza o dia relacionado a esse <code>Intervalo</code>.
+	 * 
+	 * @param d Novo dia a ser atualizado
+	 */
+	@JsonProperty("dia")
+	public void setDia(Dia d){
+		dia = d;
 	}
 }

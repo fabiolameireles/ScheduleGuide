@@ -8,9 +8,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 /** <i>Documentação da classe Dia.</i>
  * 
@@ -18,8 +20,9 @@ import jakarta.persistence.Id;
  * disponíveis nos quais o algoritmo do cronograma de estudos possa atuar neste dia.</p>
  * 
  * @author Fabiola Meireles Vilaça, Igor Wandekochen Bittencourt, Rafael Vieira de Almeida
- * @see io.github.scheduleguide.domain.Intervalo
+ * @see io.github.scheduleguide.domain.Dia
  */
+@Entity
 public class Dia {
 	/** Identificador deste conteúdo, para armazenamento no banco de dados. */
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +35,7 @@ public class Dia {
 	private DayOfWeek diaDaSemana;
 
 	/** Lista de intervalos disponíveis para serem atribuídos a algum período de foco ou descanso. */
+	@OneToMany
 	private List<Intervalo> intervalos = new ArrayList<Intervalo>();
 
 	/**

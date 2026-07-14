@@ -139,9 +139,9 @@ public class Conteudo {
 		int nivel_corrigido = novo_nivel;
 		
 		if (novo_nivel < 0){
-			nivel_corrigido = novo_nivel;
+			nivel_corrigido = 0;
 		} else if (novo_nivel > 10){
-			nivel_corrigido = novo_nivel;
+			nivel_corrigido = 10;
 		}
 
 		nivelDeDominio = nivel_corrigido;

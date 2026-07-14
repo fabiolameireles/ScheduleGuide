@@ -2,10 +2,10 @@ import "./axios.min.js"
 
 const novaCatModal = document.getElementById('novaCat');
 const editarCatModal = document.getElementById('editarCat');
-const deletarCatModal = document.getElementById('deletarCat');
+const excluirCatModal = document.getElementById('excluirCat');
 const novoTopModal = document.getElementById('novoTop');
 const editarTopModal = document.getElementById('editarTop');
-const deletarTopModal = document.getElementById('deletarCat');
+const excluirTopModal = document.getElementById('excluirCat');
 
 
 async function exibirTopicosPorCategoria() {
@@ -28,6 +28,12 @@ async function exibirTopicosPorCategoria() {
           <span class="text-muted">Tópicos desta categoria</span>
           <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${catData[i].id}">
             + Adicionar Tópico
+          </button>
+          <button type="button" id="editarCat${catData[i].id}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
+            ! Editar Categoria
+          </button>
+          <button type="button" id="excluirCat${catData[i].id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
+            - Excluir Categoria
           </button>
         </div>
         <div class="row justify-content-center" id="catList${catData[i].id}">`;
@@ -64,7 +70,7 @@ async function exibirTopicosPorCategoria() {
     document.getElementById('listaCat').innerHTML = cats;
 }
 
-export function exibirOpcoesCategoria(idSelect) {
+function exibirOpcoesCategoria() {
     let select = `<option value="0">Nenhuma</option>
 `;
 
@@ -72,10 +78,10 @@ export function exibirOpcoesCategoria(idSelect) {
         const data = response.data;
 
         for (let i = 0; i < data.length; i++)
-            select += `<option value="${data[i].id}">${data[i].nome}</option>
-`
+            select += `<option id="novoTopOpcao${data[i].id}" value="${data[i].id}">${data[i].nome}</option>
+`;
 
-        document.getElementById(idSelect).innerHTML = select;
+        document.getElementById('novoTopCat').innerHTML = select;
     }).catch(function (catError) {
         console.log(catError);
     });
@@ -84,11 +90,12 @@ export function exibirOpcoesCategoria(idSelect) {
 
 function exibirNovaCategoria(catData) {
     const id = catData.id;
+    const nome = catData.nome;
 
     const catStr = `<div class="accordion-item" id="cat${id}">
   <h2 class="accordion-header" id="catHeader${id}">
     <button type="button" class="accordion-button col collapsed" data-bs-toggle="collapse" data-bs-target="#catBody${id}" id="catButton${id}" aria-expanded="false" aria-controls="catBody=${id}">
-      ${catData.nome}
+      ${nome}
     </button>
   </h2>
   <div id="catBody${id}" class="accordion-collapse collapse" aria-labelledby="catHeader${id}">
@@ -97,6 +104,12 @@ function exibirNovaCategoria(catData) {
         <span class="text-muted">Tópicos desta categoria</span>
         <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${id}">
           + Adicionar Tópico
+        </button>
+        <button type="button" id="editarCat${id}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${id}" data-bs-nome="${nome}">
+          ! Editar Categoria
+        </button>
+        <button type="button" id="excluirCat${id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${id}" data-bs-nome="${nome}">
+          - Excluir Categoria
         </button>
       </div>
       <div class="row content-justify-center" id="catList${id}">
@@ -141,6 +154,8 @@ export function criarCategoria() {
     }).then(function (response) {
         bootstrap.Modal.getInstance(novaCatModal).hide();
         exibirNovaCategoria(response.data);
+        document.getElementById('novoTopCat').innerHTML += `<option id="novoTopOpcao${response.data.id}" value="${response.data.id}">${response.data.nome}</option>
+`;
     }).catch(function (error) {
         console.log(error);
     });
@@ -153,17 +168,26 @@ export function editarCategoria() {
     axios.put(`/interno/categorias/${id}`, {
         "nome": nome
     }).then(function (response) {
-        document.getElementById(`catButton${id}`).innerHTML = response.data.nome;
+        bootstrap.Modal.getInstance(editarCatModal).hide();
+        const novoNome = response.data.nome;
+
+        document.getElementById(`catButton${id}`).textContent = novoNome;
+        document.getElementById(`editarCat${id}`).setAttribute('data-bs-nome', novoNome);
+        document.getElementById(`excluirCat${id}`).setAttribute('data-bs-nome', novoNome);
+        document.getElementById(`novoTopOpcao${id}`).textContent = novoNome;
     }).catch(function (error) {
         console.log(error);
     });
 }
 
-export function deletarCategoria() {
-    const id = deletarCatModal.querySelector('#deletarCatId').value;
+export function excluirCategoria() {
+    const id = excluirCatModal.querySelector('#excluirCatId').value;
 
     axios.delete(`/interno/categorias/${id}`).then(function () {
+        bootstrap.Modal.getInstance(excluirCatModal).hide();
+
         document.getElementById(`cat${id}`).remove();
+        document.getElementById(`novoTopOpcao${id}`).remove();
     }).catch(function (error) {
         console.log(error);
     });
@@ -214,6 +238,8 @@ export function editarTopico() {
         payload[categoria] = categoria;
 
     axios.put(`/interno/topicos/${id}`, payload).then(function (response) {
+        bootstrap.Modal.getInstance(editarTopModal).hide();
+
         const topData = response.data;
         let div = document.getElementById(`top${id}`);
 
@@ -234,10 +260,11 @@ export function editarTopico() {
     });
 }
 
-export function deletarTopico() {
-    const id = deletarTopModal.querySelector('#deletarTopId').value;
+export function excluirTopico() {
+    const id = excluirTopModal.querySelector('#excluirTopId').value;
 
     axios.delete(`interno/topicos/${id}`).then(function () {
+        bootstrap.Modal.getInstance(excluirTopModal).hide();
         let div = document.getElementById(`top${id}`);
 
         if (div != null)
@@ -249,3 +276,5 @@ export function deletarTopico() {
 
 
 exibirTopicosPorCategoria();
+
+exibirOpcoesCategoria();

@@ -57,6 +57,25 @@
             </div>
           </div>
         </div>
+        <div class="modal fade" id="excluirCat" data-bs-backdrop="static" tabindex="-1" aria-labelledby="excluirCatLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="excluirCatLabel">Excluir Categoria</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <input type="hidden" id="excluirCatId" value="0">
+                  <p id="excluirCatTexto"></p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnEditarCat" aria-label="Confirmar">Confirmar</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row justify-content-center">
         <div class="col-9 mb-3" id="listaCat"></div>
@@ -114,6 +133,19 @@
 
       novaCatModal.addEventListener('hidden.bs.modal', limparCriacaoCategoria);
     </script>
+    <script>
+      const editarCatModal = document.getElementById('editarCat');
+      const editarCatId = editarCatModal.querySelector('#editarCatId');
+      const editarCatNome = editarCatModal.querySelector('#editarCatNome');
+
+      function definirEdicaoCategoria(event) {
+        const baseEdicaoCat = event.relatedTarget;
+        editarCatId.value = baseEdicaoCat.getAttribute('data-bs-id');
+        editarCatNome.value = baseEdicaoCat.getAttribute('data-bs-nome');
+      }
+
+      editarCatModal.addEventListener('show.bs.modal', definirEdicaoCategoria);
+    </script>
     <script type="module">
       import {editarCategoria} from "./topicos.js";
 
@@ -125,16 +157,41 @@
 
       btnEditarCat.addEventListener("click", editarCat);
     </script>
+    <script>
+      const excluirCatModal = document.getElementById('excluirCat');
+      const excluirCatId = excluirCatModal.querySelector('#excluirCatId');
+      const excluirCatTexto = excluirCatModal.querySelector('#excluirCatTexto');
 
+      function definirExclusaoCategoria(event) {
+        const baseExclusaoCat = event.relatedTarget;
+        excluirCatId.value = baseExclusaoCat.getAttribute('data-bs-id');
+        excluirCatTexto.textContent = `Tem certeza de que deseja excluir a categoria ${baseExclusaoCat.getAttribute('data-bs-nome')}?`;
+      }
+
+      excluirCatModal.addEventListener('show.bs.modal', definirExclusaoCategoria);
+    </script>
     <script type="module">
-      import {exibirOpcoesCategoria} from "./topicos.js"
+      import {excluirCategoria} from "./topicos.js";
 
-      novoTopModal.addEventListener('show.bs.modal', event => {
+      const btnExcluirCat = document.getElementById('btnExcluirCat');
+
+      function excluirCat() {
+        excluirCategoria();
+      }
+
+      btnExcluirCat.addEventListener("click", excluirCat);
+    </script>
+
+    <script>
+      const novoTopModal = document.getElementById('novoTop');
+      const novoTopCat = novoTopModal.querySelector('#novoTopCat');
+
+      function definirCategoriaPadrao(event) {
         const opcaoBase = event.relatedTarget.getAttribute('data-bs-cat');
+        novoTopCat.value = opcaoBase;
+      }
 
-        exibirOpcoesCategoria('novoTopCat');
-        document.getElementById('novoTopCat').value = opcaoBase;
-      });
+      novoTopModal.addEventListener('show.bs.modal', definirCategoriaPadrao);
     </script>
     <script type="module">
       import {criarTopico} from "./topicos.js";
@@ -148,17 +205,13 @@
       btnCriarTop.addEventListener("click", criarTop);
     </script>
     <script>
-      const novoTopModal = document.getElementById('novoTop');
       const novoTopNome = novoTopModal.querySelector('#novoTopNome');
       const novoTopImagem = novoTopModal.querySelector('#novoTopImagem');
       const novoTopPrioridade = novoTopModal.querySelector('#novoTopPrioridade');
-      const novoTopCat = novoTopModal.querySelector('#novoTopCat');
 
       function limparCriacaoTopico() {
         novoTopNome.value = "";
         novoTopImagem.value = "";
-        novoTopPrioridade.value = "";
-        novoTopCat.value = "";
       }
 
       novoTopModal.addEventListener('hidden.bs.modal', limparCriacaoTopico);

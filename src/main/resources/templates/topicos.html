@@ -71,7 +71,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="btnEditarCat" aria-label="Confirmar">Confirmar</button>
+                <button type="button" class="btn btn-danger" id="btnExcluirCat" aria-label="Confirmar">Confirmar</button>
               </div>
             </div>
           </div>
@@ -105,6 +105,57 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnCriarTop" aria-label="Adicionar">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="editarTop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editarTopLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarTopLabel">Editar Topico</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <input type="hidden" id="editarTopId" value="0">
+                  <label for="editarTopNome" class="form-label">Nome</label>
+                  <input class="form-control" type="text" id="editarTopNome">
+                  <label for="editarTopImagem" class="form-label">Caminho para imagem</label>
+                  <input class="form-control" type="text" id="editarTopImagem">
+                  <label for="editarTopPrioridade" class="form-label">Prioridade</label>
+                  <select id="editarTopPrioridade">
+                    <option value="0">ALTA</option>
+                    <option value="1">MEDIA</option>
+                    <option value="2">BAIXA</option>
+                  </select>
+                  <label for="editarTopCat" class="form-label">Categoria</label>
+                  <select id="editarTopCat"></select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnEditarTop" aria-label="Atualizar">Atualizar</button>
+                <button type="button" class="btn btn-danger" data-bs-target="#excluirTop" data-bs-id="0" data-bs-nome="" aria-label="Excluir">Excluir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="excluirTop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="excluirTopLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="excluirTopLabel">Excluir Tópico</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <input type="hidden" id="excluirTopId" value="0">
+                  <p id="excluirTopTexto"></p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnExcluirTop" aria-label="Confirmar">Confirmar</button>
+                <button type="button" class="btn btn-secondary" data-bs-target="#editarTop" data-bs-id="0">Cancelar</button>
               </div>
             </div>
           </div>
@@ -215,6 +266,55 @@
       }
 
       novoTopModal.addEventListener('hidden.bs.modal', limparCriacaoTopico);
+    </script>
+    <script type="module">
+      import {carregarTopico} from "./topicos.js";
+      
+      const editarTopModal = document.getElementById('editarTop');
+
+      function carregarTop(event) {
+        const baseEdicaoTop = event.relatedTarget;
+
+        if (baseEdicaoTop.getAttribute('data-bs-id') !== "0")
+          carregarTopico();
+      }
+
+      editarTopModal.addEventListener('show.bs.modal', carregarTop);
+    </script>
+    <script type="module">
+      import {editarTopico} from "./topicos.js";
+
+      const btnEditarTop = document.getElementById('btnEditarTop');
+
+      function editarTop() {
+        editarTopico();
+      }
+
+      btnEditarTop.addEventListener("click", editarTop);
+    </script>
+    <script>
+      const excluirTopModal = document.getElementById('excluirTop');
+      const excluirTopId = excluirTopModal.querySelector('#excluirTopId');
+      const excluirTopTexto = excluirTopModal.querySelector('#excluirTopTexto');
+
+      function definirExclusaoTopico(event) {
+        const baseExclusaoTop = event.relatedTarget;
+        excluirTopId.value = baseExclusaoTop.getAttribute('data-bs-id');
+        excluirTopTexto.textContent = `Tem certeza de que deseja excluir o tópico ${baseExclusaoTop.getAttribute('data-bs-nome')}?<br>Isso excluirá todos os conteúdos associados e seus materiais!`;
+      }
+
+      excluirTopModal.addEventListener('show.bs.modal', definirExclusaoTopico);
+    </script>
+    <script type="module">
+      import {excluirTopico} from "./topicos.js";
+
+      const btnExcluirTop = document.getElementById('btnExcluirTop');
+
+      function excluirTop() {
+        excluirTopico();
+      }
+
+      btnExcluirTop.addEventListener("click", excluirTop);
     </script>
   </body>
 </html>

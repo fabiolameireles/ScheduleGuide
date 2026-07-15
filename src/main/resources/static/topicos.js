@@ -25,16 +25,22 @@ async function exibirTopicosPorCategoria() {
     <div id="catBody${catData[i].id}" class="accordion-collapse collapse" aria-labelledby="catHeader${catData[i].id}">
       <div class="accordion-body">
         <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-          <span class="text-muted">Tópicos desta categoria</span>
-          <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${catData[i].id}">
-            + Adicionar Tópico
-          </button>
-          <button type="button" id="editarCat${catData[i].id}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
-            ! Editar Categoria
-          </button>
-          <button type="button" id="excluirCat${catData[i].id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
-            - Excluir Categoria
-          </button>
+          <div class="col-lg-auto">
+            <span class="text-muted">Tópicos desta categoria</span>
+            <button type="button" class="btn btn-sm btn-outline-primary ms-md-2" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${catData[i].id}">
+              + Adicionar Tópico
+            </button>
+          </div>
+          <div class="col-lg-auto ms-auto">
+            <button type="button" id="editarCat${catData[i].id}" class="btn btn-sm btn-outline-secondary me-md-2" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
+              ! Editar Categoria
+            </button>
+          </div>
+          <div class="col-lg-auto">
+            <button type="button" id="excluirCat${catData[i].id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${catData[i].id}" data-bs-nome="${catData[i].nome}">
+              - Excluir Categoria
+            </button>
+          </div>
         </div>
         <div class="row justify-content-center" id="catList${catData[i].id}">`;
         let topData = await axios.get(`/interno/topicos/cat/${catData[i].id}`).then((topResponse) => topResponse.data).catch(function (topError) {
@@ -43,7 +49,7 @@ async function exibirTopicosPorCategoria() {
 
         for (let j = 0; j < topData.length; j++) {
             cats += `          <div class="col-4" id="top${topData[j].id}">
-            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop" data-bs-id="${topData[j].id}">
               <img id="topImagem${topData[j].id}" src="${topData[j].imagem}" class="img-fluid img-thumbnail">
               <p id="topNome${topData[j].id}">${topData[j].nome}</p>
               <p hidden id="topCat${topData[j].id}">${catData[i].id}</p>
@@ -82,6 +88,7 @@ function exibirOpcoesCategoria() {
 `;
 
         document.getElementById('novoTopCat').innerHTML = select;
+        document.getElementById('editarTopCat').innerHTML = select;
     }).catch(function (catError) {
         console.log(catError);
     });
@@ -101,16 +108,22 @@ function exibirNovaCategoria(catData) {
   <div id="catBody${id}" class="accordion-collapse collapse" aria-labelledby="catHeader${id}">
     <div class="accordion-body">
       <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-        <span class="text-muted">Tópicos desta categoria</span>
-        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${id}">
-          + Adicionar Tópico
-        </button>
-        <button type="button" id="editarCat${id}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${id}" data-bs-nome="${nome}">
-          ! Editar Categoria
-        </button>
-        <button type="button" id="excluirCat${id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${id}" data-bs-nome="${nome}">
-          - Excluir Categoria
-        </button>
+        <div class="col-lg-auto">
+          <span class="text-muted">Tópicos desta categoria</span>
+          <button type="button" class="btn btn-sm btn-outline-primary ms-md-2" data-bs-toggle="modal" data-bs-target="#novoTop" data-bs-cat="${id}">
+            + Adicionar Tópico
+          </button>
+        </div>
+        <div class="col-lg-auto ms-auto">
+          <button type="button" id="editarCat${id}" class="btn btn-sm btn-outline-secondary me-md-2" data-bs-toggle="modal" data-bs-target="#editarCat" data-bs-id="${id}" data-bs-nome="${nome}">
+            ! Editar Categoria
+          </button>
+        </div>
+        <div class="col-lg-auto">
+          <button type="button" id="excluirCat${id}" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirCat" data-bs-id="${id}" data-bs-nome="${nome}">
+            - Excluir Categoria
+          </button>
+        </div>
       </div>
       <div class="row content-justify-center" id="catList${id}">
         <p class='text-start'>Ainda não há tópicos presentes</p>
@@ -130,7 +143,7 @@ function exibirNovaCategoria(catData) {
 
 function exibirNovoTopicoEmCategoria(topData) {
     const topStr = `<div class="col-4" id="top${topData.id}>
-  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop">
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editarTop" data-bs-id="${topData.id}">
     <img src="${topData.imagem}" class="img-fluid img-thumbnail">
     <p>${topData.nome}</p>
   </button>
@@ -146,6 +159,10 @@ function exibirNovoTopicoEmCategoria(topData) {
 }
 
 
+export function carregarTopico() {
+
+}
+
 export function criarCategoria() {
     const nome = novaCatModal.querySelector('#novaCatNome').value;
 
@@ -154,8 +171,11 @@ export function criarCategoria() {
     }).then(function (response) {
         bootstrap.Modal.getInstance(novaCatModal).hide();
         exibirNovaCategoria(response.data);
-        document.getElementById('novoTopCat').innerHTML += `<option id="novoTopOpcao${response.data.id}" value="${response.data.id}">${response.data.nome}</option>
+
+        const novaOpcao = `<option id="novoTopOpcao${response.data.id}" value="${response.data.id}">${response.data.nome}</option>
 `;
+        document.getElementById('novoTopCat').innerHTML += novaOpcao;
+        document.getElementById('editarTopCat').innerHTML += novaOpcao;
     }).catch(function (error) {
         console.log(error);
     });
@@ -175,6 +195,7 @@ export function editarCategoria() {
         document.getElementById(`editarCat${id}`).setAttribute('data-bs-nome', novoNome);
         document.getElementById(`excluirCat${id}`).setAttribute('data-bs-nome', novoNome);
         document.getElementById(`novoTopOpcao${id}`).textContent = novoNome;
+        document.getElementById(`editarTopCatOpcao${id}`).textContent = novoNome;
     }).catch(function (error) {
         console.log(error);
     });
@@ -188,6 +209,7 @@ export function excluirCategoria() {
 
         document.getElementById(`cat${id}`).remove();
         document.getElementById(`novoTopOpcao${id}`).remove();
+        document.getElementById(`editarTopCatOpcao${id}`).remove();
     }).catch(function (error) {
         console.log(error);
     });

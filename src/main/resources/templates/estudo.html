@@ -12,47 +12,82 @@
     
     <div th:replace="~{fragments/header :: header}">Header</div>
 
+	<div class="card shadow-sm mb-2">
+    	<div class="card-header bg-dark text-white">
+			<h4 class="mb-0">Próximos tópicos a serem estudados</h4>
+		</div>
+		<div class="card-body p-0">
+			<p class="card-text text-dark mb-2 ps-2">
+			Opa! Parece que você ainda não tem <i>nenhum tópico programado</i> para ser estudado!</p>
+
+			<p class="card-text text-dark mb-2 ps-2">
+			Para programar o estudo de tópicos, você deve <i>gerar um cronograma</i>, e os tópicos alocados por ele aparecerão aqui.</p>
+
+			<p class="card-text text-dark mb-2 ps-2">
+			Se você não tem nenhum cronograma, você ainda pode <i>estudar manualmente</i>, navegando pela lista abaixo.</p>
+		</div>
+	</div>
+	
     <div class="card shadow-sm">
-      <div class="card-header bg-dark text-white">
-					<h4 class="mb-0">Tópicos adicionados</h4>
+    	<div class="card-header bg-dark text-white">
+			<h4 class="mb-0">Lista de tópicos para estudo manual</h4>
+		</div>
+		<div class="card-body p-0">
+			
+			<div th:if="${listaTopicos.isEmpty()}">
+				<h5>Nenhum tópico cadastrado, use a página de tópicos para preencher essa lista!</h5>
 			</div>
-			<div class="card-body p-0">
-				
-				<div th:if="${listaTopicos.isEmpty()}">
-					<h5>Nenhum tópico cadastrado, use a página de tópicos para preencher essa lista!</h5>
-				</div>
 
-				<div th:if="${!listaTopicos.isEmpty()}" class="list-group list-group-flush" id="accordionTopicos">
-					<div th:each="topico, status : ${listaTopicos}">
+			<div th:if="${!listaTopicos.isEmpty()}" class="list-group list-group-flush">
+				<div th:each="categoria, status : ${listaCategorias}">
+
+					<button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 fw-bold bg-secondary-subtle"
+						type="button"
+						data-bs-toggle="collapse" 
+						th:data-bs-target="'#collapse-cat-' + ${categoria.id}"
+						aria-expanded="false" 
+						th:attr="aria-controls='collapse-cat-' + ${categoria.id}">
+										
+						<span th:text="${categoria.nome}">Nome da Categoria</span>
+						<span class="badge bg-secondary rounded-pill" th:text="${categoria.topicos.size()}">0</span>
+					</button>
+
+					<div class="collapse" th:id="'collapse-cat-' + ${categoria.id}">
+						<div class="list-group list-group-flush border-bottom ps-3">
+							<div th:each="topico, status : ${categoria.topicos}">
 								
-						<button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 fw-bold bg-light"
-							type="button"
-							data-bs-toggle="collapse" 
-							th:data-bs-target="'#collapse-' + ${status.index}"
-							aria-expanded="false" 
-							th:attr="aria-controls='collapse-' + ${status.index}">
-											
-							<span th:text="${topico.nome}">Nome do Tópico</span>
-							<span class="badge bg-secondary rounded-pill" th:text="${topico.conteudos.size()}">0</span>
-						</button>
+								<button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 fw-bold bg-light"
+									type="button"
+									data-bs-toggle="collapse" 
+									th:data-bs-target="'#collapse-top-' + ${topico.id}"
+									aria-expanded="false" 
+									th:attr="aria-controls='collapse-top-' + ${topico.id}">
+													
+									<span th:text="${topico.nome}">Nome do Tópico</span>
+									<span class="badge bg-secondary rounded-pill" th:text="${topico.conteudos.size()}">0</span>
+								</button>
 
-						<div class="collapse" th:id="'collapse-' + ${status.index}" data-bs-parent="#accordionTopicos">
-							<div class="list-group list-group-flush border-bottom">
-												
-								<div class="list-group-item ps-4 py-2 text-secondary text-capitalize d-flex justify-content-between align-items-center" 
-									th:each="conteudo : ${topico.conteudos}">
-									
-									<span class="text-secondary text-capitalize" th:text="${conteudo.nome}">Nome do Conteúdo</span>
-									
-									<a th:href="@{/estudo/{id}(id=${conteudo.id})}" class="btn btn-sm btn-outline-primary">
-										<i class="bi bi-eye"></i> Estudar conteúdo
-									</a>
+								<div class="collapse" th:id="'collapse-top-' + ${topico.id}">
+									<div class="list-group list-group-flush border-bottom">
+										<div class="list-group-item ps-5 py-2 text-secondary text-capitalize d-flex justify-content-between align-items-center" 
+											th:each="conteudo : ${topico.conteudos}">
+											
+											<span class="text-secondary text-capitalize" th:text="${conteudo.nome}">Nome do Conteúdo</span>
+											
+											<a th:href="@{/estudo/{id}(id=${conteudo.id})}" class="btn btn-sm btn-outline-primary">
+												<i class="bi bi-eye"></i> Estudar conteúdo
+											</a>
+										</div>
+									</div>
 								</div>
-							</div>
+
+							</div>			
 						</div>
 					</div>
+
 				</div>
 			</div>
+		</div>
     </div>
 
   </body>
